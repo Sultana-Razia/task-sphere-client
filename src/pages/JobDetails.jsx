@@ -1,17 +1,46 @@
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { useLoaderData } from "react-router-dom"
 import { AuthContext } from "../provider/AuthProvider";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
+import axios from "axios";
+import toast from "react-hot-toast";
+
 
 const JobDetails = () => {
+    const [startDate, setStartDate] = useState(new Date());
 
     const { user } = useContext(AuthContext);
 
     const job = useLoaderData();
-    const { _id, job_title, category, description, min_price, max_price, deadline } = job || {};
+    const { _id, job_title, category, description, min_price, max_price, deadline, buyer_email } = job || {};
 
     const handleFormSubmission = async e => {
-        e.preventDefault();
+        if (user?.email === buyer_email) return toast.error('Action not permitted');
 
+        e.preventDefault();
+        const form = e.target;
+        const jobId = _id;
+        const price = parseFloat(form.price.value);
+        const comment = form.comment.value;
+        const deadline = startDate;
+        const email = user?.email;
+        // const buyer_email = buyer_email;
+        const status = 'pending';
+
+        if (price < parseFloat(min_price)) return toast.error('Offer more or at least equal to minimum price');
+
+        const bidData = {
+            jobId, price, deadline, comment, job_title, email, category, status, buyer_email
+        };
+        console.table(bidData);
+        try {
+            const { data } = await axios.post(`${import.meta.env.VITE_API_URL}/bid`, bidData);
+            console.log(data);
+        }
+        catch (err) {
+            console.log(err);
+        }
     }
 
     return (
@@ -96,13 +125,16 @@ const JobDetails = () => {
                                 id='comment'
                                 name='comment'
                                 type='text'
-                                className='block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-200 rounded-md   focus:border-blue-400 focus:ring-blue-300 focus:ring-opacity-40  focus:outline-none focus:ring'
+                                className='block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-200 rounded-md focus:border-blue-400 focus:ring-blue-300 focus:ring-opacity-40  focus:outline-none focus:ring'
                             />
                         </div>
                         <div className='flex flex-col gap-2 '>
                             <label className='text-gray-700'>Deadline</label>
 
                             {/* Date Picker Input Field */}
+                            <DatePicker className="border p-2 rounded-md"
+                                selected={startDate}
+                                onChange={(date) => setStartDate(date)} />
                         </div>
                     </div>
 
