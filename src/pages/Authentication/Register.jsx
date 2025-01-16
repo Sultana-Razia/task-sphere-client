@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import img from '../../assets/images/register.jpg';
 import logoImg from '../../assets/images/logo.png'
 import { AuthContext } from '../../provider/AuthProvider';
@@ -8,7 +8,10 @@ import toast from 'react-hot-toast';
 const Registration = () => {
 
     const navigate = useNavigate();
+    const location = useLocation();
     const { user, setUser, createUser, signInWithGoogle, updateUserProfile, } = useContext(AuthContext);
+
+    const from = location.state || '/';
 
     //Email password signUp
     const handleSignUp = async e => {
@@ -25,7 +28,7 @@ const Registration = () => {
             console.log(result);
             await updateUserProfile(name, photo);
             setUser({ ...user, photoURL: photo, displayName: name });
-            navigate('/');
+            navigate(from, { replace: true });
             toast.success('SignUp Successful');
         }
         catch (err) {
@@ -39,7 +42,7 @@ const Registration = () => {
         try {
             await signInWithGoogle();
             toast.success('SignIn Successful');
-            navigate('/');
+            navigate(from, { replace: true });
         }
         catch (err) {
             console.log(err);
