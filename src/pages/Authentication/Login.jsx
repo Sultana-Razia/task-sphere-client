@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import bgImg from '../../assets/images/login.jpg';
 import logo from '../../assets/images/logo.png';
@@ -8,7 +8,13 @@ import toast from 'react-hot-toast';
 const Login = () => {
     const navigate = useNavigate();
     const location = useLocation();
-    const { signIn, signInWithGoogle, } = useContext(AuthContext);
+    const { signIn, signInWithGoogle, user, loading } = useContext(AuthContext);
+
+    useEffect(() => {
+        if (user) {
+            navigate('/');
+        }
+    }, [navigate, user])
 
     const from = location.state || '/';
 
@@ -44,6 +50,8 @@ const Login = () => {
             toast.error(err?.message);
         }
     }
+
+    if (user || loading) return;
 
     return (
         <div className='flex justify-center items-center min-h-[calc(100vh-306px)] my-12'>
