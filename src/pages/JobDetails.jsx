@@ -1,5 +1,5 @@
 import { useContext, useState } from "react";
-import { useLoaderData } from "react-router-dom"
+import { useLoaderData, useNavigate } from "react-router-dom"
 import { AuthContext } from "../provider/AuthProvider";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
@@ -11,6 +11,7 @@ const JobDetails = () => {
     const [startDate, setStartDate] = useState(new Date());
 
     const { user } = useContext(AuthContext);
+    const navigate = useNavigate();
 
     const job = useLoaderData();
     const { _id, job_title, category, description, min_price, max_price, deadline, buyer } = job || {};
@@ -25,20 +26,23 @@ const JobDetails = () => {
         const deadline = startDate;
         const email = user?.email;
         // const buyer_email = buyer_email;
-        const status = 'pending';
+        const status = 'Pending';
 
         if (price < parseFloat(min_price)) return toast.error('Offer more or at least equal to minimum price');
 
         const bidData = {
             jobId, price, deadline, comment, job_title, email,
             category,
+            buyer_email: buyer?.email,
             status,
-            buyer_email: buyer?.email
+            buyer
         };
         console.table(bidData);
         try {
             const { data } = await axios.post(`${import.meta.env.VITE_API_URL}/bid`, bidData);
             console.log(data);
+            toast.success('Bid placed successfully!');
+            Navigate('/my-bids');
         }
         catch (err) {
             console.log(err);
