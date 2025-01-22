@@ -4,6 +4,7 @@ import img from '../../assets/images/register.jpg';
 import logoImg from '../../assets/images/logo.png'
 import { AuthContext } from '../../provider/AuthProvider';
 import toast from 'react-hot-toast';
+import axios from 'axios';
 
 const Registration = () => {
 
@@ -27,7 +28,14 @@ const Registration = () => {
             const result = await createUser(email, pass);
             console.log(result);
             await updateUserProfile(name, photo);
-            setUser({ ...user, photoURL: photo, displayName: name });
+            // Optimistic UI update
+            setUser({ ...result?.user, photoURL: photo, displayName: name });
+            console.log(result.user);
+            const { data } = await axios.post(`${import.meta.env.VITE_API_URL}/jwt`,
+                { email: result?.user?.email },
+                { withCredentials: true }
+            );
+            console.log(data);
             navigate(from, { replace: true });
             toast.success('SignUp Successful');
         }
@@ -40,7 +48,13 @@ const Registration = () => {
     //Google signIn
     const handleGoogleSignIn = async () => {
         try {
-            await signInWithGoogle();
+            const result = await signInWithGoogle();
+            console.log(result.user);
+            const { data } = await axios.post(`${import.meta.env.VITE_API_URL}/jwt`,
+                { email: result?.user?.email },
+                { withCredentials: true }
+            );
+            console.log(data);
             toast.success('SignIn Successful');
             navigate(from, { replace: true });
         }
