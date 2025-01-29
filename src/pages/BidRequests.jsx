@@ -1,19 +1,28 @@
-import { useContext, useEffect, useState } from "react";
-import { AuthContext } from "../provider/AuthProvider";
-import axios from "axios";
+// import { useEffect, useState } from "react";
+import { useQuery } from '@tanstack/react-query';
+import useAxiosSecure from "../hooks/useAxiosSecure";
+import useAuth from "../hooks/useAuth";
 
 const BidRequests = () => {
+    const { user } = useAuth();
+    const axiosSecure = useAxiosSecure();
 
-    const { user } = useContext(AuthContext);
-    const [bids, setBids] = useState([]);
+    const { data: bids = [], isLoading, refetch, isError, error } = useQuery({
+        queryFn: () => getData(),
+        queryKey: ['bids', user?.email],
+    })
+    console.log(bids);
+    console.log(isLoading);
 
-    useEffect(() => {
-        getData()
-    }, [user?.email])
+    // const [bids, setBids] = useState([]);
+
+    // useEffect(() => {
+    //     getData()
+    // }, [user?.email])
 
     const getData = async () => {
-        const { data } = await axios(`${import.meta.env.VITE_API_URL}/bid-requests/${user?.email}`)
-        setBids(data)
+        const { data } = await axiosSecure(`/bid-requests/${user?.email}`)
+        return data;
     }
     console.log(bids);
 
@@ -21,11 +30,16 @@ const BidRequests = () => {
     const handleStatus = async (id, prevStatus, status) => {
         if (prevStatus === status) return console.log('Sorry');
         console.log(id, prevStatus, status);
-        const { data } = await axios.patch(`${import.meta.env.VITE_API_URL}/bid/${id}`, { status });
+        const { data } = await axiosSecure.patch(`/bid/${id}`, { status });
         console.log(data);
         // UI Refresh/Update
         getData();
     }
+
+    if (isLoading) return <p>Data is still loading............</p>
+    // if (isError || error) {
+    //     console.log(isError, error);
+    // }
 
     return (
         <section className='container px-4 mx-auto pt-12'>
@@ -99,7 +113,7 @@ const BidRequests = () => {
                                 <tbody className='bg-white divide-y divide-gray-200 '>
                                     {
                                         bids.map(bid => (
-                                            <tr>
+                                            <tr key={bid._id}>
                                                 <td className='px-4 py-4 text-sm text-gray-500  whitespace-nowrap'>
                                                     {bid.job_title}
                                                 </td>

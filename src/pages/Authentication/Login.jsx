@@ -22,8 +22,10 @@ const Login = () => {
     //Google signIn
     const handleGoogleSignIn = async () => {
         try {
+            //1.google signIn from firebase
             const result = await signInWithGoogle();
             console.log(result.user);
+            //2.get token from server using email
             const { data } = await axios.post(`${import.meta.env.VITE_API_URL}/jwt`,
                 { email: result?.user?.email },
                 { withCredentials: true }
