@@ -1,11 +1,13 @@
 // import { useEffect, useState } from "react";
-import { useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import useAxiosSecure from "../hooks/useAxiosSecure";
 import useAuth from "../hooks/useAuth";
+import toast from 'react-hot-toast';
 
 const BidRequests = () => {
     const { user } = useAuth();
     const axiosSecure = useAxiosSecure();
+    const queryClient = useQueryClient();
 
     const { data: bids = [], isLoading, refetch, isError, error } = useQuery({
         queryFn: () => getData(),
@@ -26,14 +28,27 @@ const BidRequests = () => {
     }
     console.log(bids);
 
+    const { mutateAsync } = useMutation({
+        mutationFn: async ({ id, status }) => {
+            const { data } = await axiosSecure.patch(`/bid/${id}`, { status });
+            console.log(data);
+            return data;
+        },
+        onSuccess: () => {
+            console.log('data updated');
+            toast.success('Updated');
+            //refresh ui for latest data
+            // refetch();
+            queryClient.invalidateQueries({ queryKey: ['bids'] })
+        },
+    })
+
     //handleStatus
     const handleStatus = async (id, prevStatus, status) => {
         if (prevStatus === status) return console.log('Sorry');
         console.log(id, prevStatus, status);
-        const { data } = await axiosSecure.patch(`/bid/${id}`, { status });
-        console.log(data);
-        // UI Refresh/Update
-        getData();
+
+        await mutateAsync({ id, status });
     }
 
     if (isLoading) return <p>Data is still loading............</p>
