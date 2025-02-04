@@ -1,11 +1,12 @@
-import React, { useContext, useEffect, useState } from 'react';
-import { AuthContext } from '../provider/AuthProvider';
+import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import useAxiosSecure from '../hooks/useAxiosSecure';
+import useAuth from '../hooks/useAuth';
 
 
 const MyBids = () => {
-
-    const { user } = useContext(AuthContext);
+    const axiosSecure = useAxiosSecure();
+    const { user } = useAuth();
     const [bids, setBids] = useState([]);
 
     useEffect(() => {
@@ -15,7 +16,7 @@ const MyBids = () => {
     console.log(bids);
 
     const getData = async () => {
-        const { data } = await axios(`${import.meta.env.VITE_API_URL}/my-bids/${user?.email}`);
+        const { data } = await axiosSecure(`/my-bids/${user?.email}`);
         setBids(data);
     }
 
@@ -90,7 +91,7 @@ const MyBids = () => {
                                 </thead>
                                 <tbody className='bg-white divide-y divide-gray-200 '>
                                     {
-                                        bids.map(bid => <tr>
+                                        bids.map(bid => <tr key={bid._id}>
                                             <td className='px-4 py-4 text-sm text-gray-500  whitespace-nowrap'>
                                                 {bid.job_title}
                                             </td>
