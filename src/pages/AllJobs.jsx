@@ -9,14 +9,15 @@ const AllJobs = () => {
     const [count, setCount] = useState(0);
     const [jobs, setJobs] = useState([]);
     const [filter, setFilter] = useState('');
+    const [sort, setSort] = useState('');
 
     useEffect(() => {
         const getData = async () => {
-            const { data } = await axios(`${import.meta.env.VITE_API_URL}/all-jobs?page=${currentPage}&size=${itemsPerPage}&filter=${filter}`);
+            const { data } = await axios(`${import.meta.env.VITE_API_URL}/all-jobs?page=${currentPage}&size=${itemsPerPage}&filter=${filter}&sort=${sort}`);
             setJobs(data);
         }
         getData();
-    }, [currentPage, filter, itemsPerPage]);
+    }, [currentPage, filter, itemsPerPage, sort]);
     console.log(jobs);
 
     useEffect(() => {
@@ -35,6 +36,11 @@ const AllJobs = () => {
     const handlePaginationButton = (value) => {
         console.log(value);
         setCurrentPage(value);
+    }
+
+    const handleReset = () => {
+        setFilter('');
+        setSort('');
     }
 
     return (
@@ -76,8 +82,13 @@ const AllJobs = () => {
                     </form>
                     <div>
                         <select
-                            name='category'
-                            id='category'
+                            onChange={e => {
+                                setSort(e.target.value)
+                                setCurrentPage(1)
+                            }}
+                            value={sort}
+                            name='sort'
+                            id='sort'
                             className='border p-4 rounded-md'
                         >
                             <option value=''>Sort By Deadline</option>
@@ -85,7 +96,9 @@ const AllJobs = () => {
                             <option value='asc'>Ascending Order</option>
                         </select>
                     </div>
-                    <button className='btn'>Reset</button>
+                    <button
+                        onClick={handleReset}
+                        className='btn'>Reset</button>
                 </div>
                 <div className='grid grid-cols-1 gap-8 mt-8 xl:mt-16 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4'>
                     {jobs.map(job => (
