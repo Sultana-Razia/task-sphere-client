@@ -20,7 +20,7 @@ const AllJobs = () => {
         }
         getData();
     }, [currentPage, filter, itemsPerPage, sort, search]);
-    console.log(jobs);
+    // console.log(jobs);
 
     useEffect(() => {
         const getCount = async () => {
@@ -29,7 +29,7 @@ const AllJobs = () => {
         }
         getCount();
     }, [filter, search]);
-    console.log(count);
+    // console.log(count);
 
     const numberOfPages = Math.ceil(count / itemsPerPage);
     const pages = [...Array(numberOfPages).keys()].map(element => element + 1);
@@ -45,7 +45,7 @@ const AllJobs = () => {
         // const text = e.target.search.value;
         setSearch(searchText);
     }
-    console.log(search);
+    // console.log(search);
 
     const handleReset = () => {
         setFilter('');

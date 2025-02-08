@@ -13,7 +13,7 @@ const MyBids = () => {
 
         getData();
     }, [user])
-    console.log(bids);
+    // console.log(bids);
 
     const getData = async () => {
         const { data } = await axiosSecure(`/my-bids/${user?.email}`);

@@ -13,8 +13,8 @@ const BidRequests = () => {
         queryFn: () => getData(),
         queryKey: ['bids', user?.email],
     })
-    console.log(bids);
-    console.log(isLoading);
+    // console.log(bids);
+    // console.log(isLoading);
 
     // const [bids, setBids] = useState([]);
 
@@ -26,7 +26,7 @@ const BidRequests = () => {
         const { data } = await axiosSecure(`/bid-requests/${user?.email}`)
         return data;
     }
-    console.log(bids);
+    // console.log(bids);
 
     const { mutateAsync } = useMutation({
         mutationFn: async ({ id, status }) => {
