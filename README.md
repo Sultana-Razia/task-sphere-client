@@ -1,28 +1,29 @@
 # TaskSphere
 
-Live link: 
+Live link: https://tasksphere-d188b.web.app
 
 Resources:
 
 - [Meraki UI - Components](https://merakiui.com/components)
 
-- [react-tabs]()
+- [react-tabs](https://www.npmjs.com/package/react-tabs)
 
-- [Swiper Slider]()
+- [Swiper Slider](https://swiperjs.com)
 
-- Daisy UI
+- [Daisy UI](https://daisyui.com)
 
-- TailwindCSS
+- [TailwindCSS](https://tailwindcss.com)
 
-- React Router Dom
+- [React Router Dom](https://reactrouter.com/en/main)
 
-- Express
+- [Express](https://expressjs.com)
 
-- Firebase
+- [Firebase](https://console.firebase.google.com)
 
-- MongoDB
+- [MongoDB](https://www.mongodb.com)
 
-- React-Hot-Toast
+- [React-Hot-Toast](https://react-hot-toast.com)
 
-- date-fns
+- [date-fns](https://date-fns.org)
 
+- [axios](https://axios-http.com/docs/intro)

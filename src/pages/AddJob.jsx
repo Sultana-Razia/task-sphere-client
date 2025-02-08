@@ -34,6 +34,7 @@ const AddJob = () => {
                 name: user?.displayName,
                 photo: user?.photoURL
             },
+            bid_count: 0,
         }
         try {
             const { data } = await axios.post(`${import.meta.env.VITE_API_URL}/job`, jobData);
@@ -77,7 +78,7 @@ const AddJob = () => {
                                 name='email'
                                 disabled
                                 defaultValue={user?.email}
-                                className='block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-200 rounded-md  focus:border-blue-400 focus:ring-blue-300 focus:ring-opacity-40  focus:outline-none focus:ring'
+                                className='block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-200 rounded-md focus:border-blue-400 focus:ring-blue-300 focus:ring-opacity-40 focus:outline-none focus:ring'
                             />
                         </div>
                         <div className='flex flex-col gap-2 '>
@@ -111,7 +112,7 @@ const AddJob = () => {
                                 id='min_price'
                                 name='min_price'
                                 type='number'
-                                className='block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-200 rounded-md  focus:border-blue-400 focus:ring-blue-300 focus:ring-opacity-40  focus:outline-none focus:ring'
+                                className='block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-200 rounded-md focus:border-blue-400 focus:ring-blue-300 focus:ring-opacity-40 focus:outline-none focus:ring'
                             />
                         </div>
 
@@ -123,7 +124,7 @@ const AddJob = () => {
                                 id='max_price'
                                 name='max_price'
                                 type='number'
-                                className='block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-200 rounded-md  focus:border-blue-400 focus:ring-blue-300 focus:ring-opacity-40  focus:outline-none focus:ring'
+                                className='block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-200 rounded-md focus:border-blue-400 focus:ring-blue-300 focus:ring-opacity-40  focus:outline-none focus:ring'
                             />
                         </div>
                     </div>
@@ -132,7 +133,7 @@ const AddJob = () => {
                             Description
                         </label>
                         <textarea
-                            className='block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-200 rounded-md  focus:border-blue-400 focus:ring-blue-300 focus:ring-opacity-40  focus:outline-none focus:ring'
+                            className='block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-200 rounded-md focus:border-blue-400 focus:ring-blue-300 focus:ring-opacity-40  focus:outline-none focus:ring'
                             name='description'
                             id='description'
                         ></textarea>
